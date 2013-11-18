@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		
+	</h:head>
+	<h:body>
+		<ui:composition>
+			<h:form>
+				<p:menubar id="mnu" >
+					<p:menuitem value="Relatório" onclick="dlg.show();"></p:menuitem>					
+				</p:menubar>
+			</h:form>
+			
+			<p:dialog id="dlgRelatorio" header="Selecione as opções de relatório"
+				visible="false" widgetVar="dlg" 
+				modal="true" resizable="false" 
+				closable="false" draggable="false">
+				
+				<h:form id="form">
+				
+					<p:focus for="btnImprimir" />  
+		  
+			        <h:panelGrid columns="2" style="margin-bottom:10px">  
+			        
+			        	<h:outputLabel for="txtEquipe" value="Equipe" />  
+			            <p:inputText id="txtEquipe"
+			            	value="#{impressaoBean.equipe}"
+			            	maxlength="10"
+			            	size="10" />
+			        
+			            <h:outputLabel for="txtDataInicio" value="Data Inicial" />  
+			            <p:calendar id="txtDataInicio" readonlyInput="true" showOn="button"	
+			            	value="#{impressaoBean.dataInicio}" pattern="dd/MM/yyyy"/>  
+			            
+			            <h:outputLabel for="txtDataFim" value="Data Final" />  
+			            <p:calendar id="txtDataFim" readonlyInput="true" showOn="button"
+			            	value="#{impressaoBean.dataFim}" pattern="dd/MM/yyyy" />  
+			            
+			        </h:panelGrid>  
+					
+			        <p:commandButton id="btnImprimir"
+			        	value="Imprimir" onclick="dlg.hide();" oncomplete="dlgTable.show();"
+			        	actionListener="#{impressaoBean.imprimir}" update=":formTable:dlgImpressao" >
+			        	
+		        	</p:commandButton>
+			        	
+			        	
+			        <p:commandButton id="btnCancelar" 
+			        	value="Cancelar" oncomplete="dlg.hide();"/>  
+		        
+		    	</h:form>  
+			</p:dialog>
+			
+			<h:form id="formTable">  
+			
+				<p:dialog id="dlgImpressao" 
+					visible="false" widgetVar="dlgTable" 
+					resizable="false">
+					
+					<table width="100%">
+						<tr>
+							<td style="width: 100px">
+								<p:graphicImage height="82px"
+									value="/images/brasao.gif"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td><h:outputText value="SECRETARIA DE ESTADO DE FAZENDA" style="font-size:14px; font-weight: bold;" /></td>
+									</tr>
+									<tr>
+										<td><h:outputText value="SUPERINTENDÊNCIA DE ADMINISTRAÇÃO TRIBUTÁRIA" style="font-size:14px; font-weight: bold;" /></td>
+									</tr>
+									<tr>
+										<td><h:outputText value="COORDENADORIA DE FISCALIZAÇÃO DE MERCADORIAS EM TRÂNSITO" style="font-size:14px; font-weight: bold;" /></td>
+									</tr>
+									<tr>
+										<td><h:outputText value="UNIDADE GESTORA DE FISCALIZAÇÃO MÓVEL" style="font-size:14px; font-weight: bold;" /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					
+					<table>
+						<tr><td><h:outputText value="PLANILHA DE ABORDAGEM DE VEÍCULOS N. _____/2013" /></td></tr>
+						<tr><td><h:outputText value="Equipe: #{impressaoBean.equipe}" /></td></tr>
+			  			<tr><td><h:outputText value="Plantão - Início: " /></td></tr>
+		  			</table>
+		  			<p:scrollPanel style="width:575px;height:250px"> 
+				        
+			            <p:dataTable var="a" value="#{impressaoBean.abordagensReport}">  
+					        <p:column headerText="Data">  
+					            <h:outputText value="#{a.dataAbordagem}" >
+					            	<f:convertDateTime pattern="dd.MM.yyyy" />
+					            </h:outputText>  
+					        </p:column>  
+					  
+					        <p:column headerText="Placa">  
+					            <h:outputText value="#{a.placa}" />  
+					        </p:column> 
+					        
+					        <p:column headerText="Documentos Consultados" 
+					        		width="80" style="white-space: normal;">  
+					            <h:outputText value="#{a.numDocs}" />  
+					        </p:column>
+					  
+					        <p:column headerText="Irregularidade">  
+					            
+					        </p:column>  
+					        
+					        <p:column headerText="DAEMS">  
+					            <h:outputText value="#{a.daems}" />  
+					        </p:column> 
+					        
+					        <p:column headerText="ICMS">  
+					            <h:outputText value="#{a.valorICMS}" />  
+					        </p:column> 
+					  
+					        <p:column headerText="Multa">  
+					            <h:outputText value="#{a.valorMulta}" />  
+					        </p:column>  
+					    </p:dataTable>  
+					    
+			        </p:scrollPanel>
+			        <table>
+			        	<tr><td><h:outputText value="VISTO" /></td></tr>
+		  				<tr><td><h:outputText value="ATE: _______________________________________    ATE: _______________________________________" /></td></tr>
+		  			</table>
+			        <p:commandButton id="btnFechar" 
+			        	value="Fechar" oncomplete="dlgTable.hide();"/> 
+		    		<p:commandButton value="Baixar como PDF" ajax="false" icon="ui-icon-arrowthichk-s">
+						<p:fileDownload value="#{impressaoBean.printReport()}"></p:fileDownload>
+					</p:commandButton>
+				</p:dialog>
+			
+			</h:form>  
+			
+		</ui:composition>
+	</h:body>
+
+</html>

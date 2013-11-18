@@ -1,0 +1,68 @@
+<ui:composition template="layout.xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="content">
+	
+		<h:form>
+			<p:panel id="panel">
+				<p:messages id="msgs" />
+				
+				<p:focus context="panel"/>  
+				
+				<h:outputText value="Equipe: " />
+				<h:outputText value="#{abordagemBean.equipeBean.equipe}" style="color:red;font-size:20px;"  />
+				
+				<p:panelGrid columns="2">
+					<f:facet name="header">  
+				        <h:outputLabel value="Informe os dados da abordagem:"/>
+				    </f:facet>				    
+					
+				    <p:outputLabel for="txtDataAbordagem" value="Data Abordagem"/>
+					<p:inputText id="txtDataAbordagem" title="Data Abordagem" 
+						value="#{abordagemBean.a.dataAbordagem}" 
+						disabled="true">
+						<f:convertDateTime pattern="dd/MM/yy" />
+					</p:inputText>
+					
+					<p:outputLabel for="txtPlaca" value="Placa"/>
+					<p:inputMask id="txtPlaca" title="Placa" 
+						value="#{abordagemBean.a.placa}" 
+						required="true" 
+						requiredMessage="Placa é obrigatório"
+						mask="aaa9999"/>
+						
+					<p:outputLabel for="txtNumDocs" value="numDocs"/>
+					<p:inputMask id="txtNumDocs" title="Docs.Consultados" 
+						value="#{abordagemBean.a.numDocs}" 
+						required="true" 
+						requiredMessage="Numero de Documentos é obrigatório"
+						mask="?99">
+						<f:convertNumber type="number" />
+					</p:inputMask>
+						
+					<h:outputLabel for="txtDaems" value="DAEMS"/>
+					<p:inputText id="txtDaems" title="DAEMS" 
+						value="#{abordagemBean.a.daems}" />
+					
+					<h:outputLabel for="txtValorIcms" value="Valor ICMS"/>
+					<p:inputText id="txtValorIcms" title="Valor ICMS" 
+						value="#{abordagemBean.a.valorICMS}" />
+						
+					<h:outputLabel for="txtValorMulta" value="Valor Multa"/>
+					<p:inputText id="txtValorMulta" title="Valor Multa" 
+						value="#{abordagemBean.a.valorMulta}" />
+															
+					<f:facet name="footer">  
+				        <p:commandButton value="Salvar" 
+				        	action="#{abordagemBean.salvarNovaAbordagem}" ajax="false" />
+				    </f:facet>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	
+	</ui:define>
+	
+</ui:composition>

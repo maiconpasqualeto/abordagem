@@ -1,0 +1,42 @@
+<ui:composition template="layout.xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="content">
+		
+		<h:form>
+			<h:inputHidden id="txtEquipe" value="#{abordagemBean.a.equipe}" />		
+			<p:panel>
+				<p:messages id="msgs" />
+				<p:panelGrid columns="2">
+					<f:facet name="header">  
+				        <h:outputLabel value="Entre com a equipe e com a placa:"/>
+				    </f:facet>
+
+					<p:outputLabel for="txtDataAbordagem" value="Data Abordagem"/>
+					<p:inputText id="txtDataAbordagem" title="Data Abordagem" 
+						value="#{abordagemBean.a.dataAbordagem}" 
+						disabled="true">
+						<f:convertDateTime pattern="dd/MM/yy" />
+					</p:inputText>
+					
+					<p:outputLabel for="txtPlaca" value="Placa"/>
+					<p:inputMask id="txtPlaca" title="Placa" 
+						value="#{abordagemBean.a.placa}" 
+						required="true" 
+						requiredMessage="Placa é obrigatório"
+						mask="aaa9999"/>
+					
+					<f:facet name="footer">  
+						<p:commandButton value="Salvar" action="#{abordagemBean.salvarInicial}" ajax="false" />
+				        <p:commandButton value="Continuar" action="#{abordagemBean.validaInicio}" ajax="false" />
+				    </f:facet>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

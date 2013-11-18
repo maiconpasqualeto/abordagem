@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+  <title><ui:insert name="title">Abordagem</ui:insert></title>
+  <h:outputStylesheet name="default.css" library="css" />
+  
+</h:head>
+
+<h:body>
+
+<div id="logo">
+    <ui:insert name="header">
+    	<ui:include src="cabecalho.xhtml"/>
+    </ui:insert>
+</div>
+<div id="menu">
+    <ui:insert name="menu">
+    	<ui:include src="menu.xhtml"/>
+    </ui:insert>
+</div>
+
+<div id="content">
+  <ui:insert name="content"/>
+</div>
+
+<div id="footer">
+  <ui:insert name="footer">
+		<ui:include src="rodape.xhtml"/>
+  </ui:insert>
+</div>
+
+</h:body>
+
+</html>
