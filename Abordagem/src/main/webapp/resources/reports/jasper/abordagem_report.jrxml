@@ -20,7 +20,8 @@
 	<queryString language="SQL">
 		<![CDATA[select distinct placa, equipe, data_abordagem, num_docs, daems, valor_icms, valor_multa from abordagem
 where data_abordagem >= $P{DataInicio} and data_abordagem <= $P{DataFim}
- $P!{null_equipe}]]>
+ $P!{null_equipe}
+ order by data_abordagem]]>
 	</queryString>
 	<field name="data_abordagem" class="java.sql.Date"/>
 	<field name="placa" class="java.lang.String"/>

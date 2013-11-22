@@ -135,7 +135,7 @@ public class AbordagemBean implements Serializable {
 		
 	}
 	
-	public String salvarAbordagem(){
+	/*public String salvarAbordagem(){
 		try {
 			// salva
 			AbordagemDAO.getInstance().atualizaAbordagem(
@@ -157,7 +157,7 @@ public class AbordagemBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar abordagem", "Erro ao salvar abordagem"));
 		}
 		return "inicio.xhtml?equipe="+ a.getEquipe();
-	}
+	}*/
 	
 	
 	private boolean validaEquipe(String equipe){
@@ -181,13 +181,13 @@ public class AbordagemBean implements Serializable {
 		try {
 			// verifica se já existe a placa
 			Abordagem abordagem = 
-					AbordagemDAO.getInstance().buscarAbordagemPorPlacaEData(
-							a.getPlaca(), a.getDataAbordagem());
+					AbordagemDAO.getInstance().buscarAbordagemPorPlacaDataEquipe(
+							a.getPlaca(), a.getDataAbordagem(), equipeBean.getEquipe());
 			
 			if (abordagem != null) { // abordagem já existe
 				// atualiza valores
 				AbordagemDAO.getInstance().atualizaAbordagem(
-						a.getPlaca(), a.getDataAbordagem(), a.getDaems(), a.getValorICMS(), a.getValorMulta());
+						a.getPlaca(), a.getDataAbordagem(), equipeBean.getEquipe(), a.getDaems(), a.getValorICMS(), a.getValorMulta(), a.getNumDocs());
 				
 				FacesContext.getCurrentInstance().addMessage("geral",
 						new FacesMessage("A placa: " + a.getPlaca() + " já existia, os dados foram alterados.", "Registro Alterado."));

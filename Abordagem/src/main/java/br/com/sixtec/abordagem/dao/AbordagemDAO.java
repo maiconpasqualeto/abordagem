@@ -73,7 +73,8 @@ public class AbordagemDAO extends BridgeBaseDAO {
 		try {
 			StringBuilder hql = new StringBuilder();
 			hql.append("select a from Abordagem a ");
-			hql.append("where a.dataAbordagem >= :dataInicio and a.dataAbordagem <= :dataFim");
+			hql.append("where a.dataAbordagem >= :dataInicio and a.dataAbordagem <= :dataFim ");
+			hql.append("order by a.dataAbordagem ");
 			TypedQuery<Abordagem> q = em.createQuery(hql.toString(), Abordagem.class);
 			q.setParameter("dataInicio", dataInicio);
 			q.setParameter("dataFim", dataFim);
@@ -96,7 +97,8 @@ public class AbordagemDAO extends BridgeBaseDAO {
 			StringBuilder hql = new StringBuilder();
 			hql.append("select a from Abordagem a ");
 			hql.append("where a.dataAbordagem >= :dataInicio and a.dataAbordagem <= :dataFim ");
-			hql.append("and a.equipe = :equipe");
+			hql.append("and a.equipe = :equipe ");
+			hql.append("order by a.dataAbordagem ");
 			TypedQuery<Abordagem> q = em.createQuery(hql.toString(), Abordagem.class);
 			q.setParameter("dataInicio", dataInicio);
 			q.setParameter("dataFim", dataFim);
@@ -137,8 +139,41 @@ public class AbordagemDAO extends BridgeBaseDAO {
 		return a;
 	}
 	
-	public void atualizaAbordagem(String placa, Date dataAbordagem, 
-			String daems, BigDecimal valorIcms, BigDecimal valorMulta) {
+	public Abordagem buscarAbordagemPorPlacaDataEquipe(String placa, Date dataAbordagem, String equipe) {
+		EntityManager em = AdministradorPersistencia.getEntityManager();
+		Abordagem a = null;
+		try {
+			StringBuilder hql = new StringBuilder();
+			hql.append("select a from Abordagem a ");
+			hql.append("where a.placa = :placa and a.dataAbordagem = :dataAbordagem ");
+			if (equipe == null)
+				hql.append("and a.equipe is null");
+			else
+				hql.append("and a.equipe = :equipe");
+			TypedQuery<Abordagem> q = em.createQuery(hql.toString(), Abordagem.class);
+			q.setParameter("placa", placa);
+			q.setParameter("dataAbordagem", dataAbordagem);
+			if (equipe != null)
+				q.setParameter("equipe", equipe);
+			
+			q.setMaxResults(1);
+			
+			a = q.getSingleResult();
+						
+		} catch (NoResultException e) {
+			// não retornou nenhum objeto não faz nada
+		} catch (Exception e) {
+			log.error("Erro ao buscar abordagem por placa", e);
+			throw new FacesException(e);
+		} finally {
+			em.close();
+		}
+		return a;
+	}
+	
+	public void atualizaAbordagem(String placa, Date dataAbordagem,
+			String equipe, String daems, BigDecimal valorIcms, 
+			BigDecimal valorMulta, Integer numDocs) {
 		
 		EntityManager em = AdministradorPersistencia.getEntityManager();
 		EntityTransaction t = em.getTransaction();
@@ -147,8 +182,13 @@ public class AbordagemDAO extends BridgeBaseDAO {
 			
 			StringBuilder hql = new StringBuilder();
 			hql.append("update Abordagem a ");
-			hql.append("set a.daems=:daems, a.valorICMS=:valorICMS, a.valorMulta=:valorMulta ");
+			hql.append("set a.daems=:daems, a.valorICMS=:valorICMS, a.valorMulta=:valorMulta, a.numDocs=:numDocs ");
 			hql.append("where a.placa = :placa and a.dataAbordagem = :dataAbordagem ");
+			if (equipe == null)
+				hql.append("and a.equipe is null ");
+			else
+				hql.append("and a.equipe = :equipe ");
+			
 			Query q = em.createQuery(hql.toString());
 			
 			q.setParameter("daems", daems.isEmpty() ? null : daems);
@@ -156,7 +196,11 @@ public class AbordagemDAO extends BridgeBaseDAO {
 			q.setParameter("valorMulta", valorMulta);
 			
 			q.setParameter("placa", placa.toUpperCase());
-			q.setParameter("dataAbordagem", dataAbordagem);		
+			q.setParameter("dataAbordagem", dataAbordagem);	
+			q.setParameter("numDocs", numDocs);	
+			
+			if (equipe != null)
+				q.setParameter("equipe", equipe);
 			
 			q.executeUpdate();
 						
