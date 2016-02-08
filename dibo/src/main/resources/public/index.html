@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="dibo">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Cadastro</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Alexandre Dibo</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="confirmados.html">Confirmados</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Bem Vindo Aeronauta!!</h1>
+        <p>Para confirmar sua presença na festa de aniversário do neto do Alexandre Dibo, 
+        	basta preencher o formulário abaixo. </p>
+      </div>
+    </div>
+
+    <div class="container" ng-controller="ctrlCadastro">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-6">
+        	<form name="formCadastro" ng-submit="cadastrar(aviador)" novalidate>
+        		<div class="alert alert-danger aligncenter bold" ng-show="jaCadastrado">Email já cadastrado !!</div>
+				<div class="form-group">
+				  <label for="txtEmail">Email address</label>
+				  <sapn ng-messages="formCadastro.txtEmail.$error" ng-if="formCadastro.txtEmail.$touched" class="error-message">
+				  	<span ng-message="required">* ( Necessário )</span>
+				  	<span ng-message="pattern">* ( Inválido! )</span>
+				  </sapn>
+				  <input type="email" class="form-control" name="txtEmail" placeholder="Email"
+				  		ng-class="{'form-error':(formCadastro.txtEmail.$error.required || formCadastro.txtEmail.$error.pattern) && formCadastro.txtEmail.$touched}"
+				  		ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" 
+				  		ng-model="aviador.email" required autofocus>
+				</div>
+				<div class="form-group">
+					<label for="txtNome">Nome</label>
+					<sapn ng-messages="formCadastro.txtNome.$error" ng-if="formCadastro.txtNome.$touched" class="error-message">
+					  <span ng-message="required">* ( Necessário )</span>
+					</sapn>
+					<input type="text" class="form-control" name="txtNome" placeholder="Nome"
+						ng-class="{'form-error':formCadastro.txtNome.$error.required && formCadastro.txtNome.$touched}"
+						ng-model="aviador.nome" required>
+				</div>				
+				<div class="form-group">
+					<label for="txtTelefone">Telefone</label>
+					<sapn ng-messages="formCadastro.txtTelefone.$error" ng-if="formCadastro.txtTelefone.$touched" class="error-message">
+						<span ng-message="required">* ( Necessário )</span>
+					</sapn>
+				  	<input type="text" class="form-control" name="txtTelefone" ng-model="aviador.telefone"
+				  		ng-class="{'form-error':formCadastro.txtTelefone.$error.required && formCadastro.txtTelefone.$touched}"
+				  		ui-mask="(99) 9999-9999?9" ui-mask-placeholder ui-mask-placeholder-char="_" required>
+				</div>
+				<div class="form-group">
+					<label for="txtPrefixo">Prefixo Aeronave</label>
+					<sapn ng-messages="formCadastro.txtPrefixo.$error" ng-if="formCadastro.txtPrefixo.$touched" class="error-message">
+						<span ng-message="required">* ( Necessário )</span>
+					</sapn>
+					<input type="text" class="form-control" name="txtPrefixo" placeholder="Prefixo" ng-model="aviador.prefixo"
+						ng-class="{'form-error':formCadastro.txtPrefixo.$error.required && formCadastro.txtPrefixo.$touched}"
+						ui-mask="AA-AAA" ui-mask-placeholder ui-mask-placeholder-char="_" required >
+				</div>
+				<div class="form-group">
+					<label for="txtModelo">Modelo da Aeronave (Ex.: Pelican, Curisco, Cessna 172)</label>
+					<sapn ng-messages="formCadastro.txtModelo.$error" ng-if="formCadastro.txtModelo.$touched" class="error-message">
+						<span ng-message="required">* ( Necessário )</span>
+					</sapn>
+					<input type="text" class="form-control" name="txtModelo" placeholder="Modelo" ng-model="aviador.modelo"
+						ng-class="{'form-error':formCadastro.txtModelo.$error.required && formCadastro.txtModelo.$touched}"
+						required >
+				</div>
+				<div class="form-group">
+					<label for="txtQtd">Quantidade de convidados (Contar o piloto e passageiros)</label>
+					<sapn ng-messages="formCadastro.txtQtd.$error" ng-if="formCadastro.txtQtd.$touched" class="error-message">
+						<span ng-message="required">* ( Necessário )</span>
+					</sapn>
+					<input type="number" class="form-control" name="txtQtd" placeholder="Quantidade" ng-model="aviador.qtd"
+						ng-class="{'form-error':formCadastro.txtQtd.$error.required && formCadastro.txtQtd.$touched}"
+						ng-init="aviador.qtd=1"
+						required min="1" >
+				</div>
+				<button type="submit" class="btn btn-success">Enviar</button>
+			</form>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2016 - Aviopark inc.</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    
+    <!-- angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-messages.min.js"></script>
+	<script src="js/mask.min.js"></script>
+	<script src="js/angular-base64.min.js"></script>
+	
+	<!-- custom script -->
+	<script src="js/script.js"></script>
+	
+  </body>
+</html>
